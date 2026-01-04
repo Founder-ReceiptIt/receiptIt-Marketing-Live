@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, Eye, Lock, Check, Home, Clock, Play, User } from 'lucide-react';
+import { Shield, Eye, Lock, Check, Home, Clock, Play, User, ChevronDown } from 'lucide-react';
 import SuccessModal from './components/SuccessModal';
 import { supabase } from './lib/supabase';
 
@@ -25,18 +25,28 @@ function App() {
     setIsModalOpen(true);
   };
 
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-inter">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <header className="text-center mb-24">
-          <div className="inline-flex items-center gap-2 mb-8">
-            <Shield className="text-neon-teal" size={40} />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center gap-3">
+            <Shield className="text-neon-teal" size={32} />
             <h1 className="text-2xl font-jetbrains font-bold">
               <span className="text-white">receipt</span>
               <span className="text-neon-teal">It</span>
             </h1>
           </div>
-        </header>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
 
         <section className="max-w-4xl mx-auto text-center mb-32">
           <div className="flex justify-center mb-8">
@@ -83,6 +93,15 @@ function App() {
               </p>
             </div>
           </form>
+
+          <button
+            onClick={scrollToFeatures}
+            className="mt-16 flex flex-col items-center gap-2 mx-auto text-white/40 hover:text-neon-teal transition-colors cursor-pointer group"
+            aria-label="Scroll to features"
+          >
+            <span className="text-xs font-jetbrains tracking-wider">SCROLL DOWN</span>
+            <ChevronDown size={24} className="animate-bounce group-hover:text-neon-teal" />
+          </button>
         </section>
 
         <section className="max-w-4xl mx-auto mb-32">
@@ -99,7 +118,7 @@ function App() {
           </div>
         </section>
 
-        <section className="max-w-6xl mx-auto mb-32">
+        <section id="features" className="max-w-6xl mx-auto mb-32">
           <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-12">
             WHY <span className="text-white">receipt</span><span className="text-neon-teal">It</span>?
           </h3>

@@ -39,8 +39,8 @@ export default function SuccessModal({ isOpen, onClose, alias }: SuccessModalPro
         .insert([{ alias: alias.toLowerCase(), email }]);
 
       if (insertError) {
-        if (insertError.code === '23505') {
-          setError('This alias is already taken. Please choose another.');
+        if (insertError.code === '23505' || (insertError as any).status === 409) {
+          setError('This email or alias has already been claimed.');
         } else {
           setError('Something went wrong. Please try again.');
         }
