@@ -91,24 +91,26 @@ function App() {
             <span className="text-neon-teal">YOUR REAL EMAIL.</span>
           </h2>
           <p className="text-xl sm:text-2xl text-white/80 mb-12 font-inter">
-            The smart receipt tracker and privacy firewall in one. Stop spam while automatically organising your financial life.
+            The smart receipt tracker and privacy firewall in one.
           </p>
 
           <form onSubmit={handleClaimClick} className="max-w-3xl mx-auto space-y-4">
-            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-full p-2 flex items-center gap-2">
-              <User size={20} className="text-white/40 ml-4" />
-              <input
-                type="text"
-                value={alias}
-                onChange={(e) => setAlias(e.target.value)}
-                placeholder="yourname"
-                className="flex-1 bg-transparent text-white placeholder-white/40 outline-none font-jetbrains text-lg py-2"
-              />
-              <span className="text-white/60 font-jetbrains text-lg">@receiptIt.app</span>
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-3xl sm:rounded-full p-4 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
+              <div className="flex items-center gap-2 flex-1">
+                <User size={20} className="text-white/40 ml-0 sm:ml-2" />
+                <input
+                  type="text"
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
+                  placeholder="yourname"
+                  className="flex-1 bg-transparent text-white placeholder-white/40 outline-none font-jetbrains text-lg py-2"
+                />
+                <span className="text-white/60 font-jetbrains text-base sm:text-lg">@receiptIt.app</span>
+              </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 w-full sm:w-auto"
               >
                 {isSubmitting ? 'Submitting...' : 'Get Your Smart Alias'}
               </button>
