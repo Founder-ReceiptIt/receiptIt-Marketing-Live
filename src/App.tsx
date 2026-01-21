@@ -7,8 +7,9 @@ function App() {
   const [alias, setAlias] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleClaimClick = (e: React.FormEvent) => {
+  const handleClaimClick = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -22,7 +23,37 @@ function App() {
       return;
     }
 
-    setIsModalOpen(true);
+    const email = `${alias}@receiptIt.app`;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email format');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error: dbError } = await supabase
+        .from('waitlist')
+        .insert([{ email, alias }]);
+
+      if (dbError) {
+        if (dbError.code === '23505') {
+          setError("You've already secured your alias!");
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      setIsModalOpen(true);
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const scrollToFeatures = () => {
@@ -60,7 +91,7 @@ function App() {
             <span className="text-neon-teal">YOUR REAL EMAIL.</span>
           </h2>
           <p className="text-xl sm:text-2xl text-white/80 mb-12 font-inter">
-            The all-in-one privacy firewall and smart storage for your receipts. Join the waitlist to secure your unique alias and get <span className="text-neon-teal font-semibold">6 Months of Premium FREE</span> (£30 value).
+            The smart receipt tracker and privacy firewall in one. Stop spam while automatically organising your financial life.
           </p>
 
           <form onSubmit={handleClaimClick} className="max-w-3xl mx-auto space-y-4">
@@ -76,9 +107,10 @@ function App() {
               <span className="text-white/60 font-jetbrains text-lg">@receiptIt.app</span>
               <button
                 type="submit"
-                className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] whitespace-nowrap"
+                disabled={isSubmitting}
+                className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                CLAIM FREE OFFER
+                {isSubmitting ? 'Submitting...' : 'Get Your Smart Alias'}
               </button>
             </div>
 
@@ -93,6 +125,10 @@ function App() {
               </p>
             </div>
           </form>
+
+          <p className="mt-8 text-zinc-400 text-sm italic font-inter text-center max-w-2xl mx-auto">
+            "I threw away my shoebox. This app saved me £500 on a warranty claim."
+          </p>
 
           <button
             onClick={scrollToFeatures}
@@ -156,7 +192,7 @@ function App() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 sm:p-10 flex flex-col">
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-jetbrains font-bold mb-4">Free</h4>
+                <h4 className="text-2xl font-jetbrains font-bold mb-4">Privacy Starter</h4>
                 <div className="mb-2">
                   <span className="text-5xl font-jetbrains font-bold text-white">£0</span>
                   <span className="text-white/60 font-inter text-lg">/mo</span>
@@ -166,15 +202,15 @@ function App() {
               <ul className="space-y-4 mb-8 flex-grow">
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
+                  <span className="font-inter text-white/90"><span className="font-semibold">1 Smart Email Alias</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
+                  <span className="font-inter text-white/90">Block Retailer Spam</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
                   <span className="font-inter text-white/90">15 Receipts / Month</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Unlimited Digital Storage</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Basic Spam Protection</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
@@ -189,27 +225,24 @@ function App() {
 
             <div className="bg-dark-zinc/40 backdrop-blur-2xl border-2 border-neon-teal rounded-3xl p-8 sm:p-10 relative overflow-hidden shadow-[0_0_30px_rgba(45,212,191,0.3)] flex flex-col">
               <div className="absolute top-4 right-4 bg-neon-teal text-black text-xs font-jetbrains font-bold px-4 py-2 rounded-full">
-                FREE FOR WAITLIST
+                Beta User Exclusive
               </div>
 
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-jetbrains font-bold mb-4">Premium</h4>
+                <h4 className="text-2xl font-jetbrains font-bold mb-4">Full Firewall</h4>
                 <div className="flex items-center justify-center gap-3 mb-2">
-                  <span className="text-3xl font-jetbrains font-bold line-through text-white/30">£4.99</span>
-                  <span className="text-5xl font-jetbrains font-bold text-neon-teal">£0.00</span>
-                  <span className="text-white/60 font-inter text-lg">/mo</span>
+                  <span className="text-2xl font-jetbrains font-bold line-through text-white/30">£4.99/mo</span>
                 </div>
-                <p className="text-white/60 font-inter text-sm">per month for 6 months</p>
+                <div className="mb-2">
+                  <span className="text-5xl font-jetbrains font-bold text-neon-teal">6 Months FREE</span>
+                </div>
+                <p className="text-white/60 font-inter text-sm">Then £4.99/month or cancel anytime</p>
               </div>
 
               <ul className="space-y-4 mb-8 flex-grow">
                 <li className="flex items-start gap-3">
                   <Check className="text-neon-teal flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Unlimited Email Aliases</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="text-neon-teal flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Unlimited Receipt Uploads</span>
+                  <span className="font-inter text-white/90">Unlimited Smart Aliases</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-neon-teal flex-shrink-0 mt-1" size={20} />
@@ -217,29 +250,47 @@ function App() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-neon-teal flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Lifetime Search History</span>
+                  <span className="font-inter text-white/90">HMRC Tax Pack (CSV Export)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-neon-teal flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">Tax Pack (CSV/PDF Export)</span>
+                  <span className="font-inter text-white/90">Lifetime 'Vault' Storage</span>
                 </li>
               </ul>
 
               <button className="w-full bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold py-3 px-6 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)]">
-                CLAIM FREE OFFER
+                Claim Free 6 Months
               </button>
-
-              <p className="text-center text-white/50 text-xs font-inter mt-4">
-                After 6 months, continue at just £4.99/month or cancel anytime.
-              </p>
             </div>
           </div>
         </section>
 
-        <footer className="mt-32 text-center text-white/40 font-jetbrains text-sm">
+        <footer className="mt-32 pb-24 text-center text-white/40 font-jetbrains text-sm">
           <p>© 2026 <span className="text-white font-bold">receipt</span><span className="text-neon-teal font-bold">It</span>. Built with privacy-first principles.</p>
         </footer>
       </div>
+
+      <button
+        onClick={(e) => {
+          if (!alias) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            handleClaimClick(e);
+          }
+        }}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '90%',
+          maxWidth: '450px',
+          zIndex: 50
+        }}
+        className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold py-4 px-8 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_30px_rgba(45,212,191,0.8)]"
+      >
+        Secure My Free Month
+      </button>
 
       <SuccessModal
         isOpen={isModalOpen}
