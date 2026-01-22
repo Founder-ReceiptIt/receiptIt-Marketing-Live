@@ -128,7 +128,7 @@ function App() {
                   type="text"
                   value={alias}
                   onChange={(e) => setAlias(e.target.value)}
-                  placeholder="your_name"
+                  placeholder="Unique_Alias"
                   className="flex-1 bg-transparent text-white placeholder-white/40 outline-none font-jetbrains text-lg py-2"
                 />
                 <span className="text-white/60 font-jetbrains text-base">@receiptIt.app</span>
@@ -151,7 +151,7 @@ function App() {
                 disabled={isSubmitting}
                 className="w-full bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {isSubmitting ? 'Submitting...' : 'Get Your Smart Alias'}
+                {isSubmitting ? 'Submitting...' : 'Secure Your Unique Alias Now'}
               </button>
             </div>
 
