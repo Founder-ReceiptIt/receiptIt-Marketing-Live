@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import { Shield, Eye, Lock, Check, Home, Clock, Play, User, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Eye, Lock, Check, Home, Clock, Play, User, ChevronDown, Mail } from 'lucide-react';
 import SuccessModal from './components/SuccessModal';
 import { supabase } from './lib/supabase';
 
 function App() {
   const [alias, setAlias] = useState('');
+  const [email, setEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showFixedButton, setShowFixedButton] = useState(false);
 
   const handleClaimClick = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,11 +25,14 @@ function App() {
       return;
     }
 
-    const email = `${alias}@receiptIt.app`;
+    if (!email) {
+      setError('Please enter your email');
+      return;
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Please enter a valid email format');
+      setError('Please enter a valid email');
       return;
     }
 
@@ -40,7 +45,13 @@ function App() {
 
       if (dbError) {
         if (dbError.code === '23505') {
-          setError("You've already secured your alias!");
+          if (dbError.message?.includes('alias')) {
+            setError('That alias is already taken');
+          } else if (dbError.message?.includes('email')) {
+            setError('You are already on the list');
+          } else {
+            setError('That alias is already taken');
+          }
         } else {
           setError('Something went wrong. Please try again.');
         }
@@ -55,6 +66,21 @@ function App() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('section');
+      if (heroSection) {
+        const heroBottom = heroSection.getBoundingClientRect().bottom;
+        setShowFixedButton(heroBottom < 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToFeatures = () => {
     const featuresSection = document.getElementById('features');
@@ -95,22 +121,35 @@ function App() {
           </p>
 
           <form onSubmit={handleClaimClick} className="max-w-3xl mx-auto space-y-4">
-            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-3xl sm:rounded-full p-4 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
-              <div className="flex items-center gap-2 flex-1">
-                <User size={20} className="text-white/40 ml-0 sm:ml-2" />
+            <div className="space-y-3">
+              <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                <User size={20} className="text-white/40" />
                 <input
                   type="text"
                   value={alias}
                   onChange={(e) => setAlias(e.target.value)}
-                  placeholder="yourname"
+                  placeholder="your_name"
                   className="flex-1 bg-transparent text-white placeholder-white/40 outline-none font-jetbrains text-lg py-2"
                 />
-                <span className="text-white/60 font-jetbrains text-base sm:text-lg">@receiptIt.app</span>
+                <span className="text-white/60 font-jetbrains text-base">@receiptIt.app</span>
               </div>
+
+              <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                <Mail size={20} className="text-white/40" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@gmail.com"
+                  required
+                  className="flex-1 bg-transparent text-white placeholder-white/40 outline-none font-jetbrains text-lg py-2"
+                />
+              </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 w-full sm:w-auto"
+                className="w-full bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isSubmitting ? 'Submitting...' : 'Get Your Smart Alias'}
               </button>
@@ -272,33 +311,36 @@ function App() {
         </footer>
       </div>
 
-      <button
-        onClick={(e) => {
-          if (!alias) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          } else {
-            handleClaimClick(e);
-          }
-        }}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '90%',
-          maxWidth: '450px',
-          zIndex: 50
-        }}
-        className="bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold py-4 px-8 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_30px_rgba(45,212,191,0.8)]"
-      >
-        Secure My Free Month
-      </button>
+      {showFixedButton && (
+        <button
+          onClick={(e) => {
+            if (!alias || !email) {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              handleClaimClick(e);
+            }
+          }}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '90%',
+            maxWidth: '450px',
+            zIndex: 50
+          }}
+          className="bg-neon-teal/95 backdrop-blur-lg hover:bg-neon-teal text-black font-jetbrains font-bold py-4 px-8 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(45,212,191,0.8)] animate-[slideUp_0.3s_ease-out]"
+        >
+          Unlock 6 Months Free
+        </button>
+      )}
 
       <SuccessModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setAlias('');
+          setEmail('');
           setError('');
         }}
         alias={alias}
