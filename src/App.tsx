@@ -253,7 +253,7 @@ function App() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">10 Receipts / Month</span>
+                  <span className="font-inter text-white/90">25 Receipts / Month</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
