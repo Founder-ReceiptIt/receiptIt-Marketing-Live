@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, Lock, Check, Home, Clock, User, ChevronDown, Mail } from 'lucide-react';
+import { Shield, Lock, Check, Home, Clock, User, ChevronDown, Mail, Zap, Package, FileText, Search, AlertCircle, FolderX } from 'lucide-react';
 import SuccessModal from './components/SuccessModal';
 import { supabase } from './lib/supabase';
 
@@ -111,7 +111,7 @@ function App() {
 
         <section className="max-w-4xl mx-auto text-center mb-32">
           <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center px-6 py-2 rounded-full border border-neon-teal/30 bg-neon-teal/5 backdrop-blur-sm shadow-[0_0_15px_rgba(45,212,191,0.3)] animate-float">
+            <div className="inline-flex items-center px-6 py-2 rounded-full border border-neon-teal/30 bg-neon-teal/5 backdrop-blur-sm shadow-[0_0_12px_rgba(45,212,191,0.25)] animate-float">
               <span className="text-neon-teal font-jetbrains text-sm font-bold tracking-wide">PUBLIC BETA OPENING SOON</span>
             </div>
           </div>
@@ -120,8 +120,8 @@ function App() {
             <span className="text-white">STOP GIVING RETAILERS</span><br />
             <span className="text-neon-teal">YOUR REAL EMAIL.</span>
           </h2>
-          <p className="text-xl sm:text-2xl text-white/80 mb-12 font-inter">
-            The smart receipt tracker and privacy firewall in one.
+          <p className="text-xl sm:text-2xl text-white/90 mb-12 font-inter font-medium">
+            Every purchase creates a receipt. We turn them into value.
           </p>
 
           <form onSubmit={handleClaimClick} className="max-w-3xl mx-auto space-y-4">
@@ -153,9 +153,9 @@ function App() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)] hover:shadow-[0_0_30px_rgba(45,212,191,0.8)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full bg-neon-teal hover:bg-neon-teal text-black font-jetbrains font-bold px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(45,212,191,0.5)] hover:shadow-[0_0_25px_rgba(45,212,191,0.7)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {isSubmitting ? 'Submitting...' : 'Secure Your Unique Alias Now'}
+                {isSubmitting ? 'Submitting...' : 'Claim Your Private Receipt Inbox'}
               </button>
             </div>
 
@@ -171,8 +171,8 @@ function App() {
             </div>
           </form>
 
-          <p className="mt-8 text-zinc-400 text-sm italic font-inter text-center max-w-2xl mx-auto">
-            "I threw away my shoebox. This app saved me £500 on a warranty claim."
+          <p className="mt-8 text-white/60 text-sm font-inter text-center">
+            Built for privacy. Designed to save you money.
           </p>
 
           <button
@@ -185,8 +185,42 @@ function App() {
           </button>
         </section>
 
+        <section className="max-w-6xl mx-auto mb-32">
+          <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-12">
+            HOW IT WORKS
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
+              <Zap className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">Create your alias</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                Use it instead of your real email at checkout
+              </p>
+            </div>
+
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
+              <Package className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">Receipts captured automatically</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                From email, scans and imports
+              </p>
+            </div>
+
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
+              <FileText className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">Everything organised instantly</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                Track warranties, returns and tax
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="max-w-4xl mx-auto mb-32">
-          <div className="relative aspect-video bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden hover:border-neon-teal/50 transition-colors shadow-[0_0_40px_rgba(45,212,191,0.15)]">
+          <h3 className="text-2xl sm:text-3xl font-jetbrains font-bold text-center mb-8">
+            See it in action <span className="text-white/60">(30 seconds)</span>
+          </h3>
+          <div className="relative aspect-video bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden hover:border-neon-teal/50 transition-all duration-300 shadow-[0_0_30px_rgba(45,212,191,0.12)]">
             <iframe
               className="absolute inset-0 w-full h-full"
               src="https://www.youtube.com/embed/ELxHAjpYYvU"
@@ -197,12 +231,46 @@ function App() {
           </div>
         </section>
 
+        <section className="max-w-6xl mx-auto mb-40 mt-40">
+          <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-4">
+            THE PROBLEM
+          </h3>
+          <p className="text-center text-white/60 font-inter text-lg mb-12">
+            Every purchase generates a receipt, but no system manages them.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300">
+              <Search className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">Scattered Everywhere</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                Receipts live across emails, apps and paper
+              </p>
+            </div>
+
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300">
+              <AlertCircle className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">Value Gets Lost</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                Warranties expire. Returns are missed
+              </p>
+            </div>
+
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300">
+              <FolderX className="text-neon-teal mb-4" size={48} />
+              <h4 className="text-xl font-jetbrains font-bold mb-3">No Single System</h4>
+              <p className="text-white/70 font-inter leading-relaxed">
+                There's no single place to manage purchases
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section id="features" className="max-w-6xl mx-auto mb-32">
           <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-12">
             WHY <span className="text-white">receipt</span><span className="text-neon-teal">It</span>?
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-colors">
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
               <Home className="text-neon-teal mb-4" size={48} />
               <h4 className="text-xl font-jetbrains font-bold mb-3">A Home for Your Receipts.</h4>
               <p className="text-white/70 font-inter leading-relaxed">
@@ -210,7 +278,7 @@ function App() {
               </p>
             </div>
 
-            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-colors">
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
               <Shield className="text-neon-teal mb-4" size={48} />
               <h4 className="text-xl font-jetbrains font-bold mb-3">Stop Data Leaks.</h4>
               <p className="text-white/70 font-inter leading-relaxed">
@@ -218,7 +286,7 @@ function App() {
               </p>
             </div>
 
-            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-colors">
+            <div className="bg-dark-zinc/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 hover:border-neon-teal/50 transition-all duration-300">
               <Clock className="text-neon-teal mb-4" size={48} />
               <h4 className="text-xl font-jetbrains font-bold mb-3">Never Miss a Warranty.</h4>
               <p className="text-white/70 font-inter leading-relaxed">
@@ -229,9 +297,12 @@ function App() {
         </section>
 
         <section className="max-w-6xl mx-auto">
-          <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-12">
+          <h3 className="text-3xl sm:text-4xl font-jetbrains font-bold text-center mb-4">
             PRICING
           </h3>
+          <p className="text-center text-white/70 font-inter text-lg mb-12">
+            Start free. Upgrade when you rely on it.
+          </p>
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div className="bg-[#121212] backdrop-blur-2xl border border-white/10 rounded-3xl p-8 sm:p-10 flex flex-col">
               <div className="text-center mb-8">
@@ -242,7 +313,7 @@ function App() {
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-grow">
+              <ul className="space-y-4 mb-6 flex-grow">
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
                   <span className="font-inter text-white/90">1 Smart Email Alias</span>
@@ -253,7 +324,7 @@ function App() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
-                  <span className="font-inter text-white/90">25 Receipts / Month</span>
+                  <span className="font-inter text-white/90">15 Receipts / Month</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="text-white/60 flex-shrink-0 mt-1" size={20} />
@@ -265,12 +336,16 @@ function App() {
                 </li>
               </ul>
 
-              <button onClick={scrollToWaitlist} className="w-full bg-white/10 hover:bg-white/20 text-white/80 font-jetbrains font-bold py-3 px-6 rounded-full transition-all duration-200 border border-white/20">
+              <p className="text-white/50 font-inter text-sm text-center mb-6 px-2">
+                Upgrade to unlock unlimited storage and keep all receipts active
+              </p>
+
+              <button onClick={scrollToWaitlist} className="w-full bg-white/10 hover:bg-white/20 text-white/80 font-jetbrains font-bold py-3 px-6 rounded-full transition-all duration-300 border border-white/20">
                 Join Waitlist
               </button>
             </div>
 
-            <div className="bg-[#121212] backdrop-blur-2xl border-2 border-[#2dd4bf] rounded-3xl p-10 sm:p-12 relative overflow-hidden shadow-[0_0_30px_rgba(45,212,191,0.3)] flex flex-col scale-105">
+            <div className="bg-[#121212] backdrop-blur-2xl border-2 border-[#2dd4bf] rounded-3xl p-10 sm:p-12 relative overflow-hidden shadow-[0_0_20px_rgba(45,212,191,0.25)] flex flex-col scale-105">
               <div className="absolute top-4 right-4 bg-[#2dd4bf] text-[#050505] text-xs font-jetbrains font-bold px-4 py-2 rounded-full">
                 Beta User Exclusive
               </div>
@@ -309,7 +384,7 @@ function App() {
                 </li>
               </ul>
 
-              <button onClick={scrollToWaitlist} className="w-full bg-[#2dd4bf] hover:bg-[#2dd4bf]/90 text-[#050505] font-jetbrains font-bold py-3 px-6 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_0_20px_rgba(45,212,191,0.6)]">
+              <button onClick={scrollToWaitlist} className="w-full bg-[#2dd4bf] hover:bg-[#2dd4bf]/90 text-[#050505] font-jetbrains font-bold py-3 px-6 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(45,212,191,0.5)]">
                 Claim 3 Months Free
               </button>
             </div>
@@ -323,25 +398,22 @@ function App() {
 
       {showFixedButton && (
         <button
-          onClick={(e) => {
-            if (!alias || !email) {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-              handleClaimClick(e);
-            }
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           style={{
             position: 'fixed',
-            bottom: '20px',
+            bottom: '24px',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '90%',
-            maxWidth: '450px',
-            zIndex: 50
+            maxWidth: '420px',
+            zIndex: 50,
+            opacity: 0.95
           }}
-          className="bg-neon-teal/95 backdrop-blur-lg hover:bg-neon-teal text-black font-jetbrains font-bold py-4 px-8 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(45,212,191,0.8)] animate-[slideUp_0.3s_ease-out]"
+          className="bg-neon-teal backdrop-blur-lg hover:bg-neon-teal/95 text-black font-jetbrains font-bold py-3.5 px-8 rounded-full transition-all duration-300 hover:scale-[1.02] shadow-[0_0_12px_rgba(45,212,191,0.4)] hover:shadow-[0_0_18px_rgba(45,212,191,0.5)] animate-[slideUp_0.3s_ease-out]"
         >
-          Unlock 3 Months Free
+          Start Free — 3 Months Full Access
         </button>
       )}
 
